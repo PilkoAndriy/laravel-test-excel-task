@@ -129,6 +129,8 @@ return [
     |
     */
 
+    'server_max_file_size_message' => 'Max server file size',
+
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
