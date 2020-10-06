@@ -3,7 +3,7 @@
 /public/storage
 /storage/*.key
 /vendor
-/.ideag
+/.idea
 .env
 .env.backup
 .phpunit.result.cache
