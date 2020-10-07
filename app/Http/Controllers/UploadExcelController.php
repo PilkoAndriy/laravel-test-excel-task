@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUploadedFile;
+use App\Imports\ProductImport;
+use App\Services\ExcelDataFormat;
+use App\Services\ExcelDataStore;
 use App\Services\ExcelService;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UploadExcelController extends Controller
 {
@@ -29,7 +33,9 @@ class UploadExcelController extends Controller
     {
         if($request->hasFile('file')){
             $filename = $this->excelService->store($request->file);
-            //TODO Excel compiled
+            Excel::import(new ProductImport(new ExcelDataFormat() , new ExcelDataStore()), $filename);
+            //TODO Remove local file
+
         }
         return back()->with('success', __('File uploaded'));
     }
