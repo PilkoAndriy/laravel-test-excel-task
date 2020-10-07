@@ -12,7 +12,7 @@
             <a href="{{route('home')}}" class="block mt-4 lg:inline-block lg:mt-0 text-teal-lighter hover:text-gray-600 mr-4">
                 {{__('Home')}}
             </a>
-            <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-teal-lighter hover:text-gray-600 mr-4">
+            <a href="{{route('product.index')}}" class="block mt-4 lg:inline-block lg:mt-0 text-teal-lighter hover:text-gray-600 mr-4">
                 {{__('Product')}}
             </a>
         </div>
