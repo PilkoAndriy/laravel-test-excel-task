@@ -7,7 +7,7 @@
     @include('partials.head')
 </head>
 <body>
-<div class="container mx-auto font-sans text-gray-900 antialiased" id="app">
+<div class="px-10 mx-auto font-sans text-gray-900 antialiased" id="app">
     @include('partials.header')
     <main>
         @yield('content')
