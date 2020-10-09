@@ -7,6 +7,11 @@ use Illuminate\Contracts\Validation\Rule;
 class ServerMaxFileSize implements Rule
 {
     /**
+     * @var int
+     */
+    protected $serverFileSizeLimit;
+
+    /**
      * Create a new rule instance.
      *
      * @return void
@@ -34,7 +39,7 @@ class ServerMaxFileSize implements Rule
      * @param string $variable
      * @return int
      */
-    protected function convertVariableValueToByte($variable)
+    protected function convertVariableValueToByte(string $variable)
     {
         $unitToBytePowValue = array('K'=>1, 'M'=>2, 'G'=>3);
         $unitValue = strtoupper(trim(substr($variable, -1)));
@@ -52,7 +57,7 @@ class ServerMaxFileSize implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param string $attribute
+     * @param $attribute
      * @param mixed $value
      * @return bool
      */

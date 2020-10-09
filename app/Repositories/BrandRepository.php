@@ -24,7 +24,7 @@ class BrandRepository implements BrandRepositoryInterface
     /**
      * Get all brands.
      *
-     * @return Brand $brand
+     * @return Brand
      */
     public function getAll()
     {
@@ -35,10 +35,20 @@ class BrandRepository implements BrandRepositoryInterface
      * Save Post
      *
      * @param $data
-     * @return Brand $brand
+     * @return Brand
      */
     public function save($data)
     {
         return $this->brand->create($data);
+    }
+
+    /**
+     * @param array $attributes
+     * @param array $values
+     * @return Brand
+     */
+    public function firstOrCreate(array $attributes = [], array $values = [])
+    {
+        return $this->brand->firstOrCreate($attributes, $values);
     }
 }

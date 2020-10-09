@@ -6,5 +6,7 @@ interface BrandRepositoryInterface
 {
     public function getAll();
 
-    public function save($data);
+    public function save(array $data);
+
+    public function firstOrCreate(array $attributes = [], array $values = []);
 }
