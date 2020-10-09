@@ -2,16 +2,25 @@
 
 namespace App\Imports;
 
-use App\Services\ExcelDataFormat;
-use App\Services\ExcelDataStore;
+use App\Services\Excel\ExcelDataFormat;
+use App\Services\Excel\ExcelDataStore;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToArray;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class ProductImport implements WithChunkReading, ShouldQueue, WithStartRow, ToArray, WithBatchInserts
+class ProductImport implements WithChunkReading, ShouldQueue, WithBatchInserts, WithStartRow, ToArray
 {
+    /**
+     * @var ExcelDataFormat
+     */
+    protected $excelDataFormat;
+    /**
+     * @var ExcelDataStore
+     */
+    protected $dataStore;
+
     /**
      * ProductImport constructor.
      * @param ExcelDataFormat $excelDataFormat
@@ -29,9 +38,9 @@ class ProductImport implements WithChunkReading, ShouldQueue, WithStartRow, ToAr
     public function array(array $arrays)
     {
         $this->excelDataFormat->format($arrays);
-        $this->excelDataFormat->fixedBroken();
+        $this->excelDataFormat->fixedBrokenData();
         $this->excelDataFormat->setSessionFailedRowInfo();
-        $this->dataStore->storeData($this->excelDataFormat->getFormatedData());
+        $this->dataStore->storeData($this->excelDataFormat->getFormattedData());
     }
 
     /**
@@ -39,7 +48,7 @@ class ProductImport implements WithChunkReading, ShouldQueue, WithStartRow, ToAr
      */
     public function batchSize(): int
     {
-        return 5000;
+        return 2000;
     }
 
     /**
@@ -47,7 +56,7 @@ class ProductImport implements WithChunkReading, ShouldQueue, WithStartRow, ToAr
      */
     public function chunkSize(): int
     {
-        return 5000;
+        return 2000;
     }
 
     /**
