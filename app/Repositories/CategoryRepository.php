@@ -7,8 +7,14 @@ use App\Repositories\Interfaces\CategoryRepositoryInterface;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
+    /**
+     * @var Category
+     */
     protected $category;
 
+    /**
+     * @param Category $category
+     */
     public function __construct(Category $category)
     {
         $this->category = $category;
@@ -17,7 +23,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * Get all brands.
      *
-     * @return Category $brand
+     * @return Category[]
      */
     public function getAll()
     {
