@@ -24,19 +24,20 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * Get all brands.
      *
-     * @return Product $product
+     * @return Product[]|\Illuminate\Database\Eloquent\Collection
      */
     public function getAll()
     {
-        return $this->product->get();
+        return $this->product->all();
     }
 
     /**
      * Get all brands.
      *
-     * @return Product $product
+     * @param null $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage)
+    public function paginate($perPage = null)
     {
         return $this->product->with(['category.parent','brand'])->paginate($perPage);
     }
@@ -44,11 +45,23 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * Save Product
      *
-     * @param $data
-     * @return Product $product
+     * @param array $attributes
+     * @return Product
      */
-    public function save($data)
+    public function save(array $attributes = [])
     {
-        return $this->product->create($data);
+        return $this->product->create($attributes);
     }
+
+    /**
+     * @param array $attributes
+     * @param array $values
+     * @return Product
+     */
+    public function updateOrCreate(array $attributes, array $values = [])
+    {
+        return $this->product->updateOrCreate($attributes,$values);
+    }
+
+
 }

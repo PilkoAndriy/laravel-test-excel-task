@@ -4,25 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUploadedFile;
 use App\Imports\ProductImport;
-use App\Services\ExcelDataFormat;
-use App\Services\ExcelDataStore;
-use App\Services\ExcelService;
+use App\Services\Excel\ExcelDataFormat;
+use App\Services\Excel\ExcelDataStore;
+use App\Services\Excel\ExcelFileStoreService;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UploadExcelController extends Controller
 {
     /**
-     * @var ExcelService
+     * @var ExcelFileStoreService
      */
-    protected $excelService;
+    protected $excelFileStore;
+    /**
+     * @var ExcelDataFormat
+     */
+    protected $excelDataFormat;
+    /**
+     * @var ExcelDataStore
+     */
+    protected $excelDataStorage;
 
     /**
      * UploadExcelController constructor.
-     * @param ExcelService $excelService
+     * @param ExcelFileStoreService $excelFileStore
+     * @param ExcelDataFormat $excelDataFormat
+     * @param ExcelDataStore $excelDataStore
      */
-    public function __construct(ExcelService $excelService)
+    public function __construct(ExcelFileStoreService $excelFileStore, ExcelDataFormat  $excelDataFormat, ExcelDataStore $excelDataStore)
     {
-        $this->excelService = $excelService;
+        $this->excelFileStore = $excelFileStore;
+        $this->excelDataFormat = $excelDataFormat;
+        $this->excelDataStorage = $excelDataStore;
     }
 
     /**
@@ -32,8 +44,8 @@ class UploadExcelController extends Controller
     public function store(StoreUploadedFile $request)
     {
         if($request->hasFile('file')){
-            $filename = $this->excelService->store($request->file);
-            Excel::import(new ProductImport(new ExcelDataFormat() , new ExcelDataStore()), $filename);
+            $filename = $this->excelFileStore->store($request->file);
+            Excel::import(new ProductImport($this->excelDataFormat, $this->excelDataStorage), $filename);
             //TODO Remove local file
 
         }

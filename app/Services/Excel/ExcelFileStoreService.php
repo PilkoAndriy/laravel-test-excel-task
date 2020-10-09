@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Excel;
 
-class ExcelService
+class ExcelFileStoreService
 {
     /**
      * Store file

@@ -6,7 +6,9 @@ interface ProductRepositoryInterface
 {
     public function getAll();
 
-    public function paginate($perPage);
+    public function paginate($perPage = null);
 
-    public function save($data);
+    public function save(array $attributes = []);
+
+    public function updateOrCreate(array $attributes, array $values = []);
 }

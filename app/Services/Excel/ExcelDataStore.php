@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Services;
+namespace App\Services\Excel;
 
 
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\Product;
+use App\Repositories\Interfaces\BrandRepositoryInterface;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Repositories\Interfaces\ProductRepositoryInterface;
 
 /**
  * Class ExcelDataStore
@@ -27,6 +27,30 @@ class ExcelDataStore
      * @var
      */
     protected $categoryIdByTitle;
+    /**
+     * @var BrandRepositoryInterface
+     */
+    private $brandRepository;
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @param BrandRepositoryInterface $brandRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(BrandRepositoryInterface $brandRepository, CategoryRepositoryInterface $categoryRepository, ProductRepositoryInterface $productRepository)
+    {
+        $this->brandRepository = $brandRepository;
+        $this->categoryRepository = $categoryRepository;
+        $this->productRepository = $productRepository;
+    }
 
     /**
      * Store all data
@@ -35,13 +59,13 @@ class ExcelDataStore
      */
     public function storeData(array $data)
     {
-        if(isset($data['brands'])){
+        if (isset($data['brands'])) {
             $this->storeBrand($data['brands']);
         }
-        if(isset($data['categories'])){
+        if (isset($data['categories'])) {
             $this->storeCategory($data['categories']);
         }
-        if(isset($data['products'])){
+        if (isset($data['products'])) {
             $this->storeProduct($data['products']);
         }
     }
@@ -53,8 +77,8 @@ class ExcelDataStore
      */
     protected function storeBrand(array $brands)
     {
-        foreach ($brands as $brand){
-            $tempBrand = Brand::firstOrCreate(['title' => $brand['title']]);
+        foreach ($brands as $brand) {
+            $tempBrand = $this->brandRepository->firstOrCreate(['title' => $brand['title']]);
             $this->brandIdByTitle[$brand['title']] = $tempBrand->id;
         }
     }
@@ -66,8 +90,8 @@ class ExcelDataStore
      */
     protected function storeCategory(array $categories)
     {
-        foreach ($categories as $category){
-            $tempCategory = Category::firstOrCreate(['title' => $category['title'], 'parent_id' => $this->categoryIdByTitle[$category['parent_title']]??null]);
+        foreach ($categories as $category) {
+            $tempCategory = $this->categoryRepository->firstOrCreate(['title' => $category['title'], 'parent_id' => $this->categoryIdByTitle[$category['parent_title']] ?? null]);
             $this->categoryIdByTitle[$category['title']] = $tempCategory->id;
         }
     }
@@ -79,19 +103,19 @@ class ExcelDataStore
      */
     protected function storeProduct(array $products)
     {
-        foreach ($products as $product){
+        foreach ($products as $product) {
             $product['brand_id'] = $this->brandIdByTitle[$product['brand_title']];
             $product['category_id'] = $this->categoryIdByTitle[$product['category_title']];
-            Product::updateOrCreate([
+            $this->productRepository->updateOrCreate([
                 'name' => $product['name'],
                 'article' => $product['article'],
                 'brand_id' => $product['brand_id'],
                 'category_id' => $product['category_id']
-            ],[
+            ], [
                 'description' => $product['description'],
                 'price' => $product['price'],
-                'guarantee' => is_int($product['guarantee'])?$product['guarantee']:null,
-                'in_stock' => empty($product['in_stock'])?false:true
+                'guarantee' => is_int($product['guarantee']) ? $product['guarantee'] : null,
+                'in_stock' => empty($product['in_stock']) ? false : true
             ]);
         }
     }

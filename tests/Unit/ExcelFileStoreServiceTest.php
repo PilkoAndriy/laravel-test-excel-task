@@ -1,27 +1,29 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\Storage;
+use App\Services\Excel\ExcelFileStoreService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 
-class UploadTest extends TestCase
+class ExcelFileStoreServiceTest extends TestCase
 {
-    use WithoutMiddleware;
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testUpload()
+    protected $excelFileStore;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->excelFileStore = new ExcelFileStoreService();
+
+    }
+
+    public function testStore()
     {
         Storage::fake('local');
-
         // Assert storage is empty.
         $this->assertEquals([], Storage::allFiles());
-
         $uploadedFile = new UploadedFile(
             base_path('tests/files/myfile.xlsx'),
             'myfile.xlsx',
@@ -30,9 +32,7 @@ class UploadTest extends TestCase
             true
         );
 
-        $this->json('POST', route('upload.excel'),
-            ['file' => $uploadedFile]
-        )->assertStatus(302);
+        $this->excelFileStore->store($uploadedFile);
 
         // Assert the file was stored...
         $this->assertNotEquals([], Storage::allFiles());
