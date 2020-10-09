@@ -27,7 +27,7 @@ class CategoryRepository implements CategoryRepositoryInterface
      */
     public function getAll()
     {
-        return $this->category->get();
+        return $this->category->all();
     }
 
     /**
