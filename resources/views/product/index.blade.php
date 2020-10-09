@@ -6,12 +6,12 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     @if(session()->has('excel.export.error'))
-                    @foreach(session()->pull('excel.export.error') as $sessionKey => $sessionValue)
+                        @foreach(session()->pull('excel.export.error') as $sessionKey => $sessionValue)
                             <div class="bg-red-500 text-white font-bold rounded-t px-2 py-2">
                                 {{"Failed rows on key {$sessionKey}: {$sessionValue}"}}
                             </div>
 
-                    @endforeach
+                        @endforeach
                     @endif
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
@@ -69,7 +69,7 @@
                                 </td>
                                 <td class="px-6 py-4 ">
                                     <div class="text-sm leading-5 text-gray-900">{{$product->category->title}}</div>
-                                        @includeWhen(isset($product->category->parent), 'partials.product.subcategory', ['subCategory' => $product->category->parent])
+                                    @includeWhen(isset($product->category->parent), 'partials.product.subcategory', ['subCategory' => $product->category->parent])
                                 </td>
                             </tr>
                         @endforeach
