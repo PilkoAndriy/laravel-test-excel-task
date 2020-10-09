@@ -75,9 +75,11 @@
                         @endforeach
                         </tbody>
                     </table>
-                    <div class="mx-auto p-10">
-                    {{ $products->links() }}
-                    </div>
+                    @if(count($products))
+                        <div class="mx-auto p-10">
+                            {{ $products->links() }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
