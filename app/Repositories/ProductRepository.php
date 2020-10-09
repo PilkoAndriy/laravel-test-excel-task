@@ -52,4 +52,16 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return $this->product->create($attributes);
     }
+
+    /**
+     * @param array $attributes
+     * @param array $values
+     * @return Product
+     */
+    public function updateOrCreate(array $attributes, array $values = [])
+    {
+        return $this->product->updateOrCreate($attributes,$values);
+    }
+
+
 }
