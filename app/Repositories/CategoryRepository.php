@@ -33,11 +33,21 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * Save Post
      *
-     * @param $data
+     * @param array $attributes
      * @return Category
      */
-    public function save($data)
+    public function save(array $attributes = [])
     {
-        return $this->category->create($data);
+        return $this->category->create($attributes);
+    }
+
+    /**
+     * @param array $attributes
+     * @param array $values
+     * @return Category
+     */
+    public function firstOrCreate(array $attributes = [], array $values = [])
+    {
+        return $this->category->firstOrCreate($attributes, $values);
     }
 }
