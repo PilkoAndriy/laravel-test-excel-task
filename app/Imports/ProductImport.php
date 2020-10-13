@@ -4,6 +4,8 @@ namespace App\Imports;
 
 use App\Services\Excel\ExcelDataFormat;
 use App\Services\Excel\ExcelDataStore;
+use App\Services\Excel\Interfaces\ExcelDataFormatInterface;
+use App\Services\Excel\Interfaces\ExcelDataStoreInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToArray;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
@@ -12,6 +14,11 @@ use Maatwebsite\Excel\Concerns\WithStartRow;
 
 class ProductImport implements WithChunkReading, ShouldQueue, WithBatchInserts, WithStartRow, ToArray
 {
+
+    const BATCH_SIZE = 500;
+    const CHUNK_SIZE = 500;
+    const START_ROW = 2;
+
     /**
      * @var ExcelDataFormat
      */
@@ -23,10 +30,10 @@ class ProductImport implements WithChunkReading, ShouldQueue, WithBatchInserts, 
 
     /**
      * ProductImport constructor.
-     * @param ExcelDataFormat $excelDataFormat
-     * @param ExcelDataStore $dataStore
+     * @param ExcelDataFormatInterface $excelDataFormat
+     * @param ExcelDataStoreInterface $dataStore
      */
-    public function __construct(ExcelDataFormat $excelDataFormat, ExcelDataStore $dataStore)
+    public function __construct(ExcelDataFormatInterface $excelDataFormat, ExcelDataStoreInterface $dataStore)
     {
         $this->excelDataFormat = $excelDataFormat;
         $this->dataStore = $dataStore;
@@ -48,7 +55,7 @@ class ProductImport implements WithChunkReading, ShouldQueue, WithBatchInserts, 
      */
     public function batchSize(): int
     {
-        return 2000;
+        return self::BATCH_SIZE;
     }
 
     /**
@@ -56,7 +63,7 @@ class ProductImport implements WithChunkReading, ShouldQueue, WithBatchInserts, 
      */
     public function chunkSize(): int
     {
-        return 2000;
+        return self::CHUNK_SIZE;
     }
 
     /**
@@ -64,6 +71,6 @@ class ProductImport implements WithChunkReading, ShouldQueue, WithBatchInserts, 
      */
     public function startRow(): int
     {
-        return 2;
+        return self::START_ROW;
     }
 }
