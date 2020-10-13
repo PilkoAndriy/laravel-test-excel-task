@@ -7,12 +7,13 @@ namespace App\Services\Excel;
 use App\Repositories\Interfaces\BrandRepositoryInterface;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
+use App\Services\Excel\Interfaces\ExcelDataStoreInterface;
 
 /**
  * Class ExcelDataStore
  * @package App\Services
  */
-class ExcelDataStore
+class ExcelDataStore implements ExcelDataStoreInterface
 {
     /**
      * For transform from string title to saved integer ID (In DB)
@@ -27,6 +28,7 @@ class ExcelDataStore
      * @var
      */
     protected $categoryIdByTitle;
+
     /**
      * @var BrandRepositoryInterface
      */
@@ -56,8 +58,9 @@ class ExcelDataStore
      * Store all data
      *
      * @param array $data
+     * @return void
      */
-    public function storeData(array $data)
+    public function storeData(array $data): void
     {
         if (isset($data['brands'])) {
             $this->storeBrand($data['brands']);
@@ -74,8 +77,9 @@ class ExcelDataStore
      * Store brand
      *
      * @param array $brands
+     * @return void
      */
-    protected function storeBrand(array $brands)
+    protected function storeBrand(array $brands): void
     {
         foreach ($brands as $brand) {
             $tempBrand = $this->brandRepository->firstOrCreate(['title' => $brand['title']]);
@@ -87,8 +91,9 @@ class ExcelDataStore
      * Store categories
      *
      * @param array $categories
+     * @return void
      */
-    protected function storeCategory(array $categories)
+    protected function storeCategory(array $categories): void
     {
         foreach ($categories as $category) {
             $tempCategory = $this->categoryRepository->firstOrCreate(['title' => $category['title'], 'parent_id' => $this->categoryIdByTitle[$category['parent_title']] ?? null]);
@@ -100,8 +105,9 @@ class ExcelDataStore
      * Store products
      *
      * @param array $products
+     * @return void
      */
-    protected function storeProduct(array $products)
+    protected function storeProduct(array $products): void
     {
         foreach ($products as $product) {
             $product['brand_id'] = $this->brandIdByTitle[$product['brand_title']];
