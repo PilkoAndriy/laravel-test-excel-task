@@ -4,11 +4,13 @@
 namespace App\Services\Excel;
 
 
+use App\Services\Excel\Interfaces\ExcelDataFormatInterface;
+
 /**
  * Class ExcelDataFormat
  * @package App\Services
  */
-class ExcelDataFormat
+class ExcelDataFormat implements ExcelDataFormatInterface
 {
     /**
      * Cell index to real data
@@ -170,7 +172,7 @@ class ExcelDataFormat
      *
      * @return void
      */
-    public function fixedBrokenData():void
+    public function fixedBrokenData(): void
     {
         $dataForFixed = [];
         foreach ($this->failedImportData as $failedItemKey => $failedItemValue) {
@@ -210,7 +212,7 @@ class ExcelDataFormat
      * @param $key
      * @return void
      */
-    protected function removeFromFailedItemByKey($key) :void
+    protected function removeFromFailedItemByKey($key): void
     {
         unset($this->failedImportData[$key]);
     }
