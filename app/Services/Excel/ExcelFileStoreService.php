@@ -2,7 +2,9 @@
 
 namespace App\Services\Excel;
 
-class ExcelFileStoreService
+use App\Services\Excel\Interfaces\ExcelFileStoreInterface;
+
+class ExcelFileStoreService implements ExcelFileStoreInterface
 {
     /**
      * Store file
@@ -10,7 +12,7 @@ class ExcelFileStoreService
      * @param $file
      * @return string File name with path
      */
-    public function store($file)
+    public function store($file): string
     {
         return $file->storeAs('files', $this->generateFileName($file));
     }
@@ -21,7 +23,7 @@ class ExcelFileStoreService
      * @param $file
      * @return string Generated file name
      */
-    protected function generateFileName($file)
+    protected function generateFileName($file): string
     {
         $uFileName = md5($file->getClientOriginalName() . time());
         return "{$uFileName}.{$file->getClientOriginalExtension()}";
